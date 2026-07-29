@@ -417,9 +417,11 @@ Start the dev server with `preview_start` `{name: "stremio-landing"}`. Then:
 - `read_network_requests` with `urlPattern: "fonts.g"` — expect 200s for all three families, and **no request for Archivo or Source Serif 4**.
 - `javascript_tool`: `getComputedStyle(document.querySelector('h1')).fontFamily` — expect the Space Grotesk stack.
 
-- [ ] **Step 5: Judge the display face against a screenshot**
+- [x] **Step 5: Judge the display face — RESOLVED, no action**
 
-Take a screenshot of the hero. **Decision point named in the spec:** if Space Grotesk reads startup/web3 rather than industrial, swap `--font-display` to `'Archivo'` with `font-stretch: 125%` on `h1–h4`, and restore Archivo to the font request at `wdth,wght@125,600;125,700`. Record which way you went in a comment on the `--font-display` line.
+**Decision: keep Space Grotesk.** Made by the user on 2026-07-29. The Archivo-at-`wdth 125` fallback named in the spec is **not** being taken, and `--font-display` stays as Task 1 set it.
+
+Do not swap the display face, do not restore Archivo to the font request, and do not treat the absence of a swap as an outstanding item in any later task.
 
 - [ ] **Step 6: Gate**
 
