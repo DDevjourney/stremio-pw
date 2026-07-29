@@ -320,20 +320,11 @@ main {
   display: block;
   font-family: var(--font-label);
   font-size: var(--fs-label);
-  font-weight: 600;
-  letter-spacing: 0.18em;
+  font-weight: 500;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   line-height: 1;
-  color: var(--accent);
-}
-
-.eyebrow::before {
-  counter-increment: section;
-  content: counter(section, decimal-leading-zero);
-  margin-right: 0.9em;
-  padding-right: 0.9em;
-  border-right: 1px solid var(--rule-2);
-  color: var(--text-3);
+  color: var(--sig-stream);
 }
 
 .section-lead {
@@ -383,6 +374,111 @@ main {
   .section-head > .section-lead {
     grid-column: 2;
     padding-bottom: 0.4rem;
+  }
+}
+
+/* ============================================================
+   The rail — one continuous signal path down the document.
+
+   Built from borders on real grid elements: no SVG, no measurement,
+   no JS. It therefore reflows for free and cannot desynchronise from
+   the content the way a measured overlay does.
+   ============================================================ */
+
+.rail {
+  display: grid;
+  grid-template-columns: var(--rail-w) minmax(0, 1fr);
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* The vertical run. A left border on an empty column is the whole trick. */
+.rail-bus {
+  position: relative;
+  grid-column: 1;
+  border-left: var(--rail-line) solid var(--score);
+}
+
+/*
+  A junction: the horizontal stub into the content column, plus the channel
+  ID. The ID comes from the same document counter the editorial eyebrow used
+  — the numbering was always genuinely sequential; here it becomes structure
+  instead of a prefix on a label.
+*/
+.rail-junction {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding-left: 0.75rem;
+  font-family: var(--font-label);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--engrave);
+  white-space: nowrap;
+}
+
+.rail-junction::before {
+  counter-increment: section;
+  content: 'CH ' counter(section, decimal-leading-zero);
+}
+
+/* The stub. Grows to fill whatever the ID leaves, terminating at the content. */
+.rail-junction::after {
+  content: '';
+  flex: 1;
+  height: var(--rail-line);
+  background: var(--score);
+}
+
+.rail-body {
+  grid-column: 2;
+  min-width: 0;
+  padding-left: clamp(1.5rem, 3vw, 2.75rem);
+}
+
+/*
+  Below 1000px the bus moves to the gutter as a spine. It does NOT disappear:
+  the junction markers stay, so the reader still knows where they are in the
+  run and how far it goes. A spine carrying its markers is the same
+  information at lower resolution — which is what real equipment does when
+  it gets smaller.
+*/
+@media (max-width: 999px) {
+  .rail {
+    grid-template-columns: 1.75rem minmax(0, 1fr);
+    padding-inline: calc(var(--gutter) * 0.6);
+  }
+
+  .rail-junction {
+    /* ID rotates out of the flow; the lit dot carries the position. */
+    gap: 0;
+    padding-left: 0;
+  }
+
+  .rail-junction::before {
+    position: absolute;
+    left: 0.55rem;
+    top: 0.9rem;
+    transform: rotate(90deg);
+    transform-origin: left top;
+    font-size: 0.625rem;
+  }
+
+  .rail-junction::after {
+    flex: none;
+    width: 0.55rem;
+    margin-left: calc(var(--rail-line) * -1);
+  }
+
+  .rail-body {
+    padding-left: clamp(0.75rem, 3vw, 1.25rem);
   }
 }
 
