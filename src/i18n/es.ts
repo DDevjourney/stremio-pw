@@ -46,18 +46,27 @@ export const es: Dictionary = {
     eyebrow: 'Por qué Stremio',
     title: 'Pensado para cómo se ve de verdad',
     lead: 'No es otro catálogo al que suscribirte, sino un único sitio donde por fin convive todo lo que ya quieres ver.',
+    resources: {
+      catalog: 'Catálogo',
+      meta: 'Metadatos',
+      stream: 'Emisión',
+      subtitles: 'Subtítulos',
+    },
     items: [
       {
         title: 'Gratis, para siempre',
         body: 'Sin suscripción, sin pruebas que se renuevan solas, sin pagar de más por cada perfil. Stremio se descarga y se usa gratis, en todos tus dispositivos.',
+        resource: 'stream',
       },
       {
         title: 'Un catálogo sin muros',
         body: 'Los complementos oficiales y de la comunidad se integran en una sola interfaz. Películas, series, canales en directo, subtítulos y tu biblioteca: todo se busca a la vez, no app por app.',
+        resource: 'catalog',
       },
       {
         title: 'Todas tus pantallas',
         body: 'Windows, macOS, Linux, Android, iOS, Android TV, smart TV de Samsung y LG, además de un reproductor web completo. Empieza en el tren y termina en el sofá.',
+        resource: 'meta',
       },
     ],
   },

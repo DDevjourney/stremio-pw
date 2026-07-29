@@ -9,6 +9,9 @@ export type ComparisonRow = {
   disney: string | boolean
 }
 
+/** The four resource types a Stremio add-on can declare. */
+export type ResourceKey = 'catalog' | 'meta' | 'stream' | 'subtitles'
+
 /**
  * Every user-facing string on the page. Both dictionaries are typed against
  * this, so a missing translation is a compile error rather than a blank spot.
@@ -51,7 +54,9 @@ export type Dictionary = {
     eyebrow: string
     title: string
     lead: string
-    items: { title: string; body: string }[]
+    /** Display names for the four add-on resource types. */
+    resources: Record<ResourceKey, string>
+    items: { title: string; body: string; resource: ResourceKey }[]
   }
 
   how: {

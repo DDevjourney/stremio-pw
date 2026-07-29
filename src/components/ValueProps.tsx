@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react'
 import { Reveal } from './Reveal'
 import { useContent } from '../i18n/LanguageContext'
 import styles from './ValueProps.module.css'
@@ -19,18 +20,22 @@ export function ValueProps() {
           </Reveal>
 
           {/*
-            Ruled columns rather than cards: the vertical hairlines do the
-            separating, and each entry is numbered like a point in a printed
-            argument. No boxes, no icons — the type carries it.
+            Each value proposition is tagged with the add-on resource type it
+            is really about (catalog / meta / stream / subtitles). The port
+            header's colour is the same signal used everywhere else that
+            resource type appears on the page.
           */}
           <div className={styles.grid}>
-            {t.value.items.map((prop, i) => (
-              <Reveal key={prop.title} delay={i * 90} className={styles.item}>
-                <span className={styles.index} aria-hidden="true">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <h3 className={styles.itemTitle}>{prop.title}</h3>
-                <p className={styles.itemBody}>{prop.body}</p>
+            {t.value.items.map((item, i) => (
+              <Reveal key={item.title} delay={i * 90}>
+                <article
+                  className={styles.module}
+                  style={{ '--sig': `var(--sig-${item.resource})` } as CSSProperties}
+                >
+                  <span className={styles.port}>{t.value.resources[item.resource]}</span>
+                  <h3 className={styles.moduleTitle}>{item.title}</h3>
+                  <p className={styles.moduleBody}>{item.body}</p>
+                </article>
               </Reveal>
             ))}
           </div>
