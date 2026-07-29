@@ -1,30 +1,25 @@
 /*
-  Masthead. Sits transparent over the paper and, once the page moves,
-  prints itself onto a solid strip with a single rule under it — no blur,
-  no translucency, nothing that reads as glass.
+  Rack strip. The chassis top edge — a scored bottom line instead of a
+  shadow, no blur, no translucency, nothing that reads as glass.
 */
 .nav {
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
   z-index: 100;
-  border-bottom: 1px solid transparent;
-  transition:
-    background-color 0.25s var(--ease),
-    border-color 0.25s var(--ease);
+  background: var(--chassis);
+  border-bottom: 1px solid var(--score);
+  transition: background 0.2s var(--ease);
 }
 
 .scrolled {
-  background: var(--bg);
-  border-bottom-color: var(--rule-3);
+  background: var(--recess);
 }
 
 .inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.75rem;
   height: 62px;
 }
 
@@ -43,7 +38,7 @@
 
 .mark {
   flex-shrink: 0;
-  color: var(--accent);
+  color: var(--sig-stream);
   transition: transform 0.4s var(--ease-out);
 }
 
@@ -51,18 +46,19 @@
   transform: rotate(90deg);
 }
 
+/*
+  Nav links duplicate content reachable by scrolling this single-document
+  page. Below the breakpoint they are genuinely removed from the layout
+  (not just visually hidden) so they stay out of both the tab order and
+  the row's width budget — that width budget is what was pushing the
+  header past the viewport at narrow widths.
+*/
 .links {
   display: none;
   gap: 2.25rem;
-  font-family: var(--font-label);
-  font-size: var(--fs-label);
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--text-2);
 }
 
-@media (min-width: 900px) {
+@media (min-width: 860px) {
   .links {
     display: flex;
   }
@@ -70,63 +66,85 @@
 
 .link {
   position: relative;
-  transition: color 0.2s var(--ease);
+  padding: 0.55rem 0 0.55rem 1rem;
+  font-family: var(--font-label);
+  font-size: var(--fs-label);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--engrave);
+  transition: color 0.15s var(--ease);
 }
 
-/* Editor's rule: a hard 1px line, drawn left to right. */
-.link::after {
+/* The port: a jack that lights when its destination is selected. */
+.link::before {
   content: '';
   position: absolute;
   left: 0;
-  right: 0;
-  bottom: -6px;
-  height: 1px;
-  background: var(--accent);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.28s var(--ease-out);
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  margin-top: -3px;
+  border: 1px solid var(--engrave);
+  border-radius: 50%;
+  transition:
+    background 0.15s var(--ease),
+    border-color 0.15s var(--ease);
 }
 
-.link:hover {
-  color: var(--text);
+.link:hover,
+.link:focus-visible {
+  color: var(--silk);
 }
 
-.link:hover::after {
-  transform: scaleX(1);
+.link:hover::before,
+.link:focus-visible::before {
+  background: var(--sig-stream);
+  border-color: var(--sig-stream);
 }
 
 .actions {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.5rem;
+  flex-shrink: 0;
 }
 
+/* The language button: a two-position selector, bordered mono lozenge. */
 .langToggle {
-  height: 34px;
-  padding-inline: 0.75rem;
-  border: 1px solid var(--rule);
+  padding: 0.3rem 0.55rem;
   font-family: var(--font-label);
   font-size: var(--fs-label);
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  color: var(--text-2);
-  transition:
-    color 0.2s var(--ease),
-    border-color 0.2s var(--ease);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: var(--engrave);
+  border: 1px solid var(--score);
+  border-radius: var(--radius);
+  flex-shrink: 0;
 }
 
-.langToggle:hover {
-  color: var(--accent);
-  border-color: var(--accent);
+.langToggle:hover,
+.langToggle:focus-visible {
+  color: var(--silk);
+  border-color: var(--rule-2);
 }
 
+/*
+  The CTA stays visible at every width (it is not reachable by scrolling
+  the way the nav links are). It runs compact below the breakpoint where
+  the four links disappear, and grows to its full padding once there is
+  room for it.
+*/
 .navCta {
-  display: none;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.6875rem;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 480px) {
   .navCta {
-    display: inline-flex;
     padding: 0.65rem 1.25rem;
+    font-size: var(--fs-label);
   }
 }
