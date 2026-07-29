@@ -1,0 +1,154 @@
+/*
+  Set as a printed table of results: rules, no container. There is no card
+  around it, no shadow under it and no tinted "winning" column — the emphasis
+  comes from a red rule over the Stremio column and from weight, the way a
+  broadsheet would do it.
+*/
+
+/* Horizontal scroll container — the page body must never scroll sideways */
+.scroller {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.table {
+  width: 100%;
+  min-width: 680px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th,
+.table td {
+  padding: 1.05rem clamp(0.85rem, 1.6vw, 1.4rem);
+  border-bottom: 1px solid var(--rule);
+  vertical-align: middle;
+}
+
+.table th:first-child,
+.table td:first-child {
+  padding-left: 0;
+}
+
+.table tbody tr {
+  transition: background-color 0.2s var(--ease);
+}
+
+.table tbody tr:hover {
+  background: var(--accent-soft);
+}
+
+/* -------- Head -------- */
+
+.headRow th {
+  padding-block: 0.85rem;
+  border-top: 2px solid var(--rule-3);
+  border-bottom: 1px solid var(--rule-3);
+  font-family: var(--font-label);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.featureCol {
+  width: 34%;
+  min-width: 220px;
+  color: var(--text-3);
+}
+
+.brandHead {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+/* A printer's stamp, not a pill. */
+.pill {
+  padding: 0.2rem 0.45rem;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* -------- The column being argued for -------- */
+
+.highlight {
+  position: relative;
+  border-inline: 1px solid var(--rule);
+}
+
+.headRow .highlight {
+  border-top-color: var(--accent);
+  border-top-width: 3px;
+}
+
+/* -------- Cells -------- */
+
+.rowLabel {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.note {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: var(--fs-xs);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--text-3);
+}
+
+.value {
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+
+.highlight .value {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.yes,
+.no {
+  display: inline-flex;
+  align-items: center;
+}
+
+.yes {
+  color: var(--accent);
+}
+
+.no {
+  color: var(--text-3);
+}
+
+.caption {
+  margin-top: 1.25rem;
+  max-width: 74ch;
+  font-size: var(--fs-xs);
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--text-3);
+}
+
+.hint {
+  display: block;
+  margin-top: 0.85rem;
+  font-family: var(--font-label);
+  font-size: var(--fs-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+@media (min-width: 760px) {
+  .hint {
+    display: none;
+  }
+}

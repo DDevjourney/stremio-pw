@@ -1,0 +1,408 @@
+/* ------------------------------------------------------------
+   Hero — a title page, not a banner.
+
+   The claim is set flush left in condensed caps and the poster wall
+   stacks down the opposite margin, printed into the stock. Nothing
+   is centred, nothing glows.
+   ------------------------------------------------------------ */
+
+.hero {
+  position: relative;
+  padding-top: clamp(8.5rem, 17vh, 12rem);
+  padding-bottom: clamp(3.5rem, 7vw, 6rem);
+  overflow: hidden;
+}
+
+/* -------- Poster wall, right margin -------- */
+
+/*
+  Locked to the text measure rather than to the viewport: the rail is a
+  fraction of the same column the headline is set in, so the gap between the
+  claim and the first poster stays constant instead of collapsing as the
+  window widens. Overspill is clipped by the hero, so tiles bleed off-page.
+*/
+.backdrop {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100%, var(--page-max));
+  height: clamp(600px, 88vh, 980px);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/*
+  Below this the rail would sit on top of the headline instead of beside it,
+  so the wall steps aside and the hero runs on type alone.
+*/
+@media (max-width: 999px) {
+  .backdrop {
+    display: none;
+  }
+}
+
+.rail {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 42%;
+}
+
+.tile {
+  /*
+    Tops are percentages of the backdrop, but tile height is driven by viewport
+    WIDTH (clamp × the 2/3 ratio), so on a short, wide window the lowest tiles
+    would drop past the backdrop — and past the scrim that fades the wall out,
+    leaving a poster hanging at full strength below the wall. Clamping the top
+    keeps every tile inside the box the scrim covers; the extra margin absorbs
+    the blur halo and the lift from the rotation.
+  */
+  --tile-height: calc(var(--tile-width) * 1.5);
+  --tile-halo: calc(var(--tile-blur) * 2 + 14px);
+
+  position: absolute;
+  top: min(var(--tile-top), calc(100% - var(--tile-height) - var(--tile-halo)));
+  /* Anchored to the rail's inner edge — the text boundary — and growing
+     outward, so tiles bleed off the page edge rather than into the claim. */
+  left: var(--tile-inset);
+  width: var(--tile-width);
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  opacity: var(--tile-opacity);
+  filter: blur(var(--tile-blur));
+  /*
+    Multiply is what makes this read as printing rather than as images pasted
+    on: the paper tone comes through the artwork instead of covering it.
+  */
+  mix-blend-mode: multiply;
+  /* Each tile drifts at its own rate against the shared --parallax offset. */
+  transform: rotate(var(--tile-rotate))
+    translateY(calc(var(--parallax, 0px) * var(--tile-depth) * -1));
+}
+
+.tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* One ink: colour artwork would fight the two-colour palette. */
+  filter: grayscale(1) contrast(1.08);
+}
+
+/*
+  Legibility guard. Fades the wall out towards the headline on the left and
+  into the section below at the foot, so the claim never sits on artwork.
+*/
+.backdropScrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to right, var(--bg) 44%, rgba(242, 236, 225, 0) 70%),
+    linear-gradient(to bottom, rgba(242, 236, 225, 0) 62%, var(--bg) 97%);
+}
+
+/* -------- Claim -------- */
+
+.inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+/*
+  Once the poster rail appears, the whole claim is capped to the column the
+  rail leaves free — headline, subtitle, buttons and microcopy alike. Capping
+  the block rather than each element is what keeps the clearance identical in
+  English and Spanish, whose copy runs longer.
+*/
+@media (min-width: 1000px) {
+  .inner > * {
+    max-width: 54%;
+  }
+}
+
+/* Standfirst rule: the printed cue that a piece is about to start. */
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  font-family: var(--font-label);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.badge::before {
+  content: '';
+  width: 40px;
+  height: 2px;
+  background: var(--accent);
+}
+
+.headline {
+  margin-top: 1.5rem;
+  font-size: var(--fs-display);
+  font-weight: 800;
+  line-height: 0.88;
+  letter-spacing: -0.005em;
+  /* Archivo's zero is wide, so this measure is narrower than it reads:
+     roughly the same column the poster rail leaves free. */
+  max-width: 10ch;
+}
+
+/*
+  The accent word steps out of the display face into the body serif, in red
+  italic — the emphasis a printed headline uses when it has a second colour.
+*/
+.accentWord {
+  font-family: var(--font-body);
+  font-stretch: normal;
+  font-style: italic;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: -0.015em;
+  color: var(--accent);
+}
+
+.sub {
+  margin-top: 1.75rem;
+  max-width: 46ch;
+  font-size: var(--fs-lead);
+  line-height: 1.55;
+  color: var(--text-2);
+}
+
+.ctaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2.25rem;
+}
+
+.microcopy {
+  margin-top: 1.15rem;
+  font-family: var(--font-label);
+  font-size: var(--fs-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+/* -------- Catalog mockup -------- */
+
+.stage {
+  position: relative;
+  z-index: 1;
+  margin-top: clamp(3.5rem, 7vw, 5.5rem);
+}
+
+.mockup {
+  position: relative;
+  border: 1px solid var(--rule-3);
+  background: var(--surface-hi);
+  /* A hard offset instead of a soft drop shadow: registration, not depth. */
+  box-shadow: 14px 14px 0 rgba(20, 17, 14, 0.09);
+  overflow: hidden;
+  transform: translateY(calc(var(--parallax, 0px) * -0.3));
+  transition: transform 0.1s linear;
+}
+
+.chrome {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.1rem;
+  border-bottom: 1px solid var(--rule-3);
+  background: var(--surface);
+}
+
+.dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid var(--rule-2);
+}
+
+.chromeLogo {
+  flex-shrink: 0;
+  margin-right: 0.35rem;
+  color: var(--accent);
+}
+
+.chromeSearch {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0.25rem 2.5rem;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  font-family: var(--font-label);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.board {
+  padding: clamp(1rem, 2.5vw, 1.75rem);
+}
+
+.rowLabel {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--rule-2);
+  font-family: var(--font-label);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.rowLabel span:last-child {
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+}
+
+.posters {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(0.5rem, 1.4vw, 0.9rem);
+}
+
+@media (min-width: 560px) {
+  .posters {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 860px) {
+  .posters {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.poster {
+  container-type: inline-size;
+  position: relative;
+  aspect-ratio: 2 / 3;
+  border: 1px solid var(--rule-2);
+  overflow: hidden;
+  background: var(--poster-art);
+}
+
+/* Real artwork, layered over the gradient fallback */
+.posterArt {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out);
+}
+
+.loaded {
+  opacity: 1;
+}
+
+/* Legibility scrim behind the title */
+.poster::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to top,
+    rgba(10, 8, 6, 0.92) 0%,
+    rgba(10, 8, 6, 0.5) 34%,
+    transparent 62%
+  );
+}
+
+.posterInfo {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25em;
+  padding: 8cqi 7cqi;
+}
+
+.posterTitle {
+  font-family: var(--font-display);
+  font-stretch: 75%;
+  font-weight: 700;
+  font-size: max(10px, 10.5cqi);
+  line-height: 1;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: #f7f2e8;
+}
+
+.posterMeta {
+  font-family: var(--font-label);
+  font-size: max(7px, 5.6cqi);
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(247, 242, 232, 0.68);
+}
+
+.posterBadge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  padding: 1.6cqi 3cqi;
+  background: var(--accent);
+  font-family: var(--font-label);
+  font-size: max(7px, 5.2cqi);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--on-accent);
+  white-space: nowrap;
+}
+
+.progressTrack {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 3;
+  height: 3px;
+  background: rgba(247, 242, 232, 0.25);
+}
+
+.progressBar {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+}
+
+/* Selection reads as a register mark, not a lift. */
+.mockup .poster:hover {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.secondRow {
+  margin-top: clamp(1.25rem, 2.5vw, 1.9rem);
+}
+
+@media (max-width: 640px) {
+  .mockup {
+    box-shadow: 8px 8px 0 rgba(20, 17, 14, 0.09);
+    transform: translateY(calc(var(--parallax, 0px) * -0.2));
+  }
+}

@@ -1,0 +1,104 @@
+/*
+  Closing block, printed in reverse. Colour comes from the stock itself, so
+  there is nothing here to glow: the section is a solid ink page with the
+  claim set flush left against it.
+*/
+/* No rule at the top: the stock change from paper to ink is the separation. */
+.section {
+  position: relative;
+}
+
+.inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.title {
+  margin-top: 1.5rem;
+  font-size: var(--fs-h2);
+  max-width: 15ch;
+}
+
+.sub {
+  margin-top: 1.5rem;
+  max-width: 48ch;
+  font-size: var(--fs-lead);
+  line-height: 1.55;
+  color: var(--text-2);
+}
+
+.ctaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 2.25rem;
+}
+
+/*
+  Reversed stock: the button prints in paper rather than ink. Both states are
+  written out because the shared button rules live in another stylesheet at
+  the same specificity, and source order between modules isn't ours to assume.
+*/
+.ctaRow a {
+  --btn-bg: var(--text);
+  --btn-fg: var(--bg);
+}
+
+.ctaRow a:hover {
+  --btn-bg: var(--accent);
+  --btn-fg: var(--on-accent);
+}
+
+.reassure {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin-top: 2rem;
+  font-family: var(--font-label);
+  font-size: var(--fs-label);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+.reassureItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.tick {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* Platform list, set as a printed run-on rather than a row of chips. */
+.platforms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.25rem;
+  width: 100%;
+  margin-top: clamp(2.5rem, 5vw, 3.5rem);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+  font-family: var(--font-label);
+  font-size: var(--fs-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+
+.platform {
+  position: relative;
+}
+
+/* Interpunct between entries, the way a credit line separates names. */
+.platform:not(:last-child)::after {
+  content: '·';
+  position: absolute;
+  right: -0.75rem;
+  color: var(--rule-2);
+}

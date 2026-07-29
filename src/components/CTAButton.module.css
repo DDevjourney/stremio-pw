@@ -1,0 +1,72 @@
+/*
+  A printed button: solid ink block, square corners, uppercase label.
+  No glow, no gradient, no sheen — the hover is an ink swap, the way a
+  two-colour press would do it.
+*/
+.button {
+  --btn-bg: var(--text);
+  --btn-fg: var(--bg);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7em;
+  padding: 0.95rem 1.9rem;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  border: 1px solid var(--btn-bg);
+  font-family: var(--font-label);
+  font-size: var(--fs-label);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition:
+    background-color 0.2s var(--ease),
+    border-color 0.2s var(--ease),
+    color 0.2s var(--ease);
+}
+
+.button:hover {
+  --btn-bg: var(--accent);
+  --btn-fg: var(--on-accent);
+}
+
+.button:active {
+  --btn-bg: var(--accent-2);
+}
+
+/* -------- Variants -------- */
+
+.large {
+  padding: 1.15rem 2.4rem;
+  font-size: 0.8125rem;
+  letter-spacing: 0.16em;
+}
+
+/* Outline: the same block, unprinted. */
+.secondary {
+  --btn-bg: transparent;
+  --btn-fg: var(--text);
+  border-color: var(--rule-2);
+}
+
+.secondary:hover {
+  --btn-bg: transparent;
+  --btn-fg: var(--accent);
+  border-color: var(--accent);
+}
+
+.icon {
+  flex-shrink: 0;
+  transition: transform 0.25s var(--ease-out);
+}
+
+.button:hover .icon {
+  transform: translateY(2px);
+}
+
+.secondary:hover .icon {
+  transform: translateX(3px) translateY(0);
+}

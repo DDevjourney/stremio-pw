@@ -1,0 +1,125 @@
+/*
+  Q&A set as a ruled list against a standing head — the arrangement a
+  printed interview page uses. The head stays put while the answers run.
+*/
+.layout {
+  display: grid;
+  gap: clamp(2.5rem, 5vw, 4rem);
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+@media (min-width: 940px) {
+  .layout {
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: clamp(3rem, 6vw, 6rem);
+  }
+
+  .header {
+    position: sticky;
+    top: 104px;
+  }
+}
+
+.title {
+  margin-top: 1.25rem;
+  font-size: var(--fs-h2);
+  max-width: 11ch;
+}
+
+.lead {
+  margin-top: 1.25rem;
+}
+
+.list {
+  border-top: 2px solid var(--rule-3);
+}
+
+.item {
+  border-bottom: 1px solid var(--rule);
+}
+
+.trigger {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  width: 100%;
+  padding: 1.35rem 0;
+  text-align: left;
+  font-family: var(--font-display);
+  font-stretch: 75%;
+  font-size: clamp(1.125rem, 1rem + 0.5vw, 1.4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--text);
+  transition: color 0.2s var(--ease);
+}
+
+.trigger:hover,
+.open .trigger {
+  color: var(--accent);
+}
+
+.chevron {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+  color: var(--text-3);
+  transition:
+    transform 0.35s var(--ease-out),
+    color 0.2s var(--ease);
+}
+
+.trigger:hover .chevron,
+.open .chevron {
+  color: var(--accent);
+}
+
+.open .chevron {
+  transform: rotate(180deg);
+}
+
+/* Grid-rows trick: animates to the content's natural height without JS measuring */
+.panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s var(--ease-out);
+}
+
+.open .panel {
+  grid-template-rows: 1fr;
+}
+
+.panelInner {
+  overflow: hidden;
+}
+
+.answer {
+  padding-bottom: 1.5rem;
+  padding-right: clamp(0rem, 4vw, 3rem);
+  font-size: var(--fs-sm);
+  line-height: 1.7;
+  color: var(--text-2);
+}
+
+.support {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--rule);
+  font-size: var(--fs-sm);
+  font-style: italic;
+  color: var(--text-2);
+}
+
+.support a {
+  color: var(--accent);
+  font-style: normal;
+  font-weight: 600;
+  border-bottom: 1px solid currentColor;
+}
+
+.support a:hover {
+  color: var(--accent-2);
+}
