@@ -31,3 +31,12 @@
   font-size: var(--fs-xs);
   color: var(--engrave);
 }
+
+.rating {
+  display: block;
+  margin-top: 0.35rem;
+  font-family: var(--font-label);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.08em;
+  color: var(--engrave);
+}

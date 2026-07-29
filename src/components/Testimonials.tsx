@@ -21,8 +21,9 @@ export function Testimonials() {
 
           {/*
             Silkscreen labels and scored dividers only — no cards, no avatar
-            discs, no quote marks, no star rating. This section is
-            deliberately flat; see the plan for why.
+            discs, no quote marks, no star glyphs. The rating is content, so
+            it stays as a plain mono label in the credit line. This section
+            is deliberately flat; see the plan for why.
           */}
           <div className={styles.grid}>
             {t.testimonials.items.map((item, i) => (
@@ -32,6 +33,7 @@ export function Testimonials() {
                 <figcaption>
                   <span className={styles.name}>{item.name}</span>
                   <span className={styles.context}>{item.context}</span>
+                  <span className={styles.rating}>{t.testimonials.rating}</span>
                 </figcaption>
               </Reveal>
             ))}
