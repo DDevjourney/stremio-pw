@@ -59,20 +59,19 @@
   04 play (stream). Same hue-to-resource mapping the reader learned at the
   value-props rail; --sig-subtitles is deliberately absent here.
 
-  Selectors target `.run`'s direct children rather than `.stage` itself:
-  Reveal wraps each <li> in its own <div class="reveal">, so those wrapper
-  divs — not the <li> elements — are the actual siblings the ordinal count
-  applies to.
+  Reveal renders `as="li"` here (see HowItWorks.tsx), so .stage IS the
+  <li> and is a real direct child of <ol> — nth-child counts against real
+  list-item siblings, valid markup as well as a correct selector.
 */
-.run > *:nth-child(2) .marker {
+.stage:nth-child(2) .marker {
   border-color: var(--sig-catalog);
 }
 
-.run > *:nth-child(3) .marker {
+.stage:nth-child(3) .marker {
   border-color: var(--sig-meta);
 }
 
-.run > *:nth-child(4) .marker {
+.stage:nth-child(4) .marker {
   border-color: var(--sig-stream);
 }
 

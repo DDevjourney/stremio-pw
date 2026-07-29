@@ -27,13 +27,11 @@ export function HowItWorks() {
           */}
           <ol className={styles.run}>
             {t.how.steps.map((step, i) => (
-              <Reveal key={step.title} delay={i * 110}>
-                <li className={styles.stage}>
-                  <span className={styles.marker} aria-hidden="true" />
-                  <span className={styles.stageNo}>{step.number}</span>
-                  <h3 className={styles.stageTitle}>{step.title}</h3>
-                  <p className={styles.stageBody}>{step.body}</p>
-                </li>
+              <Reveal as="li" key={step.title} delay={i * 110} className={styles.stage}>
+                <span className={styles.marker} aria-hidden="true" />
+                <span className={styles.stageNo}>{step.number}</span>
+                <h3 className={styles.stageTitle}>{step.title}</h3>
+                <p className={styles.stageBody}>{step.body}</p>
               </Reveal>
             ))}
           </ol>
