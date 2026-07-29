@@ -15,29 +15,25 @@
 
 :root {
   /* -------- Type -------- */
-  /* Condensed grotesque for display, at wdth 75. */
-  --font-display: 'Archivo', 'Archivo Narrow', 'Arial Narrow', ui-sans-serif, sans-serif;
-  /* Same family at normal width, for uppercase labels and UI. */
-  --font-label: 'Archivo', ui-sans-serif, system-ui, sans-serif;
-  /* Running text. A text serif is the loudest possible break from Inter. */
-  --font-body: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  /* Squared, technical. The model-name-on-the-chassis voice. */
+  --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  /* Port IDs, signal labels, table values, timecode. A primary voice. */
+  --font-label: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+  /* Humanist enough not to read as a spec sheet. */
+  --font-body: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
 
   /*
-    Condensed display type carries far more characters per line than a
-    normal-width grotesque, so the scale runs bigger than usual.
+    Fewer, larger steps than the editorial scale. Space Grotesk is far wider
+    than Archivo at wdth 75, so the display cap is tighter: the claim's longest
+    unbreakable word still has to clear the rail column.
   */
-  /*
-    Capped so the longest word in the claim ("EVERYTHING") still fits the
-    column the poster rail leaves free — condensed caps overflow their
-    measure as a single unbreakable word long before the box does.
-  */
-  --fs-display: clamp(3.25rem, 0.5rem + 7.6vw, 6.75rem);
-  --fs-h2: clamp(2.5rem, 1.3rem + 4.4vw, 5rem);
-  --fs-h3: clamp(1.4rem, 1.15rem + 1vw, 1.95rem);
-  --fs-lead: clamp(1.125rem, 1rem + 0.6vw, 1.4rem);
+  --fs-display: clamp(2.75rem, 1rem + 5.4vw, 4.75rem);
+  --fs-h2: clamp(2rem, 1.2rem + 3vw, 3.25rem);
+  --fs-h3: clamp(1.25rem, 1.1rem + 0.7vw, 1.6rem);
+  --fs-lead: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem);
   --fs-body: 1.0625rem;
-  --fs-sm: 0.9688rem;
-  --fs-xs: 0.875rem;
+  --fs-sm: 0.9375rem;
+  --fs-xs: 0.8125rem;
   --fs-label: 0.75rem;
 
   /* -------- Layout -------- */
@@ -45,64 +41,102 @@
   --gutter: clamp(1.25rem, 4vw, 3rem);
   --section-y: clamp(4.5rem, 9vw, 8rem);
 
-  /* Square by default. 2px only where a raw corner would look like a bug. */
-  --radius: 2px;
+  /* Width of the rail column at >=1000px, and the gutter spine below it. */
+  --rail-w: 132px;
+  --rail-line: 2px;
+
+  /* Machined, not printed: a hair of radius on module faces. */
+  --radius: 3px;
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
 
-  /* -------- Ink on paper -------- */
-  color-scheme: light;
+  /* -------- Chassis -------- */
+  /*
+    Slate-teal, not black. Rack equipment is powder-coated; the deliberate
+    step away from #0a0a0a is what keeps this off the near-black default.
+  */
+  color-scheme: dark;
 
-  --bg: #f2ece1;
-  /* Slightly deeper stock, for bands that need to step back. */
-  --surface: #e8e0cf;
-  /* Brighter stock, for the few surfaces that must read as inset paper. */
-  --surface-hi: #fbf7ef;
+  --chassis: #1f2a2e;
+  --panel: #2a3639;
+  --recess: #171f22;
 
-  --text: #14110e;
-  --text-2: #55493d;
-  /* Held this dark so the small uppercase labels still clear 4.5:1 on the
-     darker stock as well as on the base paper. */
-  --text-3: #6b5f52;
+  --silk: #dfe4e0;
+  --engrave: #93a2a1;
+  --score: rgba(223, 228, 224, 0.16);
 
-  --rule: rgba(20, 17, 14, 0.2);
-  --rule-2: rgba(20, 17, 14, 0.42);
-  --rule-3: #14110e;
+  /*
+    Signal colours: one per Stremio add-on resource type. Load-bearing —
+    a hue always means the same resource type, in every section.
+  */
+  --sig-catalog: #eaa945;
+  --sig-meta: #63b3e4;
+  --sig-stream: #6cc877;
+  --sig-subtitles: #d47fc0;
 
-  /* Vermilion, one stop darker than it wants to be: the eyebrow labels are
-     12px uppercase and have to clear 4.5:1 on both stocks. */
-  --accent: #b83019;
-  --accent-2: #8f2210;
-  --accent-soft: rgba(184, 48, 25, 0.09);
-  --on-accent: #f7f1e6;
+  /* Unpowered: the "no" cells in the crosspoint matrix. */
+  --dead: #c0a19c;
 
-  --on-ink: #f2ece1;
+  /* -------- Retained aliases -------- */
+  /* Kept so every CSS module keeps compiling while sections convert. */
+  --bg: var(--chassis);
+  --surface: var(--panel);
+  --surface-hi: var(--recess);
+
+  --text: var(--silk);
+  --text-2: #b9c4c2;
+  --text-3: var(--engrave);
+
+  --rule: var(--score);
+  --rule-2: rgba(223, 228, 224, 0.34);
+  --rule-3: var(--silk);
+
+  --accent: var(--sig-stream);
+  --accent-2: var(--sig-catalog);
+  --accent-soft: rgba(108, 200, 119, 0.13);
+  --on-accent: var(--recess);
 }
 
 /*
-  Reversed block: ink stock. Redefines the same tokens rather than adding
-  new ones, so anything nested inverts without knowing it has been flipped.
+  Lit panel: where the signal terminates. Redefines the same token names
+  rather than adding new ones, so anything nested inverts without knowing
+  it has been flipped. Same mechanism the old .on-ink class used.
 */
-.on-ink {
-  color-scheme: dark;
+.lit {
+  color-scheme: light;
 
-  --bg: #14110e;
-  --surface: #1e1a15;
-  --surface-hi: #262019;
+  --chassis: #dfe4e0;
+  --panel: #eceeea;
+  --recess: #cfd6d3;
 
-  --text: #f4efe4;
-  --text-2: #b6a89b;
-  --text-3: #8d8172;
+  --silk: #161e21;
+  --engrave: #4a5a59;
+  --score: rgba(22, 30, 33, 0.2);
 
-  --rule: rgba(244, 239, 228, 0.2);
-  --rule-2: rgba(244, 239, 228, 0.45);
-  --rule-3: #f4efe4;
+  --sig-catalog: #7a4e05;
+  --sig-meta: #14567f;
+  --sig-stream: #1c6427;
+  --sig-subtitles: #8a2472;
 
-  --accent: #e8654a;
-  --accent-2: #f4886f;
-  --accent-soft: rgba(232, 101, 74, 0.12);
-  --on-accent: #14110e;
+  --dead: #6a4a46;
+
+  --bg: var(--chassis);
+  --surface: var(--panel);
+  --surface-hi: var(--recess);
+
+  --text: var(--silk);
+  --text-2: #33403f;
+  --text-3: var(--engrave);
+
+  --rule: var(--score);
+  --rule-2: rgba(22, 30, 33, 0.4);
+  --rule-3: var(--silk);
+
+  --accent: var(--sig-stream);
+  --accent-2: var(--sig-catalog);
+  --accent-soft: rgba(28, 100, 39, 0.12);
+  --on-accent: var(--chassis);
 
   background: var(--bg);
   color: var(--text);

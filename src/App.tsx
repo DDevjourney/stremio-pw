@@ -24,7 +24,7 @@ export default function App() {
           The page closes on ink: this block and the footer both reverse, so
           the piece ends on a printed page turn instead of trailing off.
         */}
-        <div className="on-ink">
+        <div className="lit">
           <FinalCTA />
         </div>
       </main>
