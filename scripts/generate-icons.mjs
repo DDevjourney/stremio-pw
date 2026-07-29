@@ -68,10 +68,10 @@ const hex = (h) => [
   parseInt(h.slice(5, 7), 16),
 ]
 
-// Two inks, no blend: the mark prints vermilion with the play knocked out in paper.
-const MARK = hex('#b83019')
-const PAPER = hex('#f2ece1')
-const INK = hex('#14110e')
+// Two inks, no blend: the mark prints stream green with the play knocked out in paper.
+const MARK = hex('#6cc877')
+const PAPER = hex('#dfe4e0')
+const INK = hex('#1f2a2e')
 
 function sdRoundBox(px, py, hx, hy, r) {
   const qx = Math.abs(px) - hx + r
