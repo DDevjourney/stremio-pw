@@ -15,10 +15,10 @@ export function FinalCTA() {
   const { t } = useContent()
 
   return (
-    <section className={`section ${styles.section}`} id="download">
+    <section className={`section ${styles.final}`} id="download">
       <div className={`container ${styles.inner}`}>
         <Reveal>
-          <span className="eyebrow">{t.finalCta.eyebrow}</span>
+          <span className={styles.terminus}>{t.finalCta.eyebrow}</span>
         </Reveal>
 
         <Reveal delay={80}>
@@ -36,7 +36,7 @@ export function FinalCTA() {
         </Reveal>
 
         <Reveal delay={310}>
-          <div className={styles.reassure}>
+          <div className={styles.reassurances}>
             {t.finalCta.reassurances.map((item) => (
               <span key={item} className={styles.reassureItem}>
                 <Tick />

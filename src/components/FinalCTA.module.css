@@ -1,11 +1,16 @@
 /*
-  Closing block, printed in reverse. Colour comes from the stock itself, so
-  there is nothing here to glow: the section is a solid ink page with the
-  claim set flush left against it.
+  Terminal panel: where the signal arrives. Rendered inside the global `.lit`
+  wrapper (see App.tsx), which redefines the chassis/text tokens to their
+  light values, so every rule below inverts without knowing it has been
+  flipped. This is the one section the rail terminates at rather than passes
+  through, so its eyebrow renders through `.terminus` instead of the shared
+  `.eyebrow` — it must not increment the rail's channel counter.
 */
-/* No rule at the top: the stock change from paper to ink is the separation. */
-.section {
-  position: relative;
+.final {
+  padding-block: clamp(5rem, 10vw, 9rem);
+  background: var(--chassis);
+  color: var(--text);
+  border-top: 3px solid var(--sig-stream);
 }
 
 .inner {
@@ -16,10 +21,19 @@
   text-align: left;
 }
 
+.terminus {
+  display: block;
+  margin-bottom: 1.5rem;
+  font-family: var(--font-label);
+  font-size: var(--fs-label);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sig-stream);
+}
+
 .title {
-  margin-top: 1.5rem;
   font-size: var(--fs-h2);
-  max-width: 15ch;
+  max-width: 16ch;
 }
 
 .sub {
@@ -38,9 +52,9 @@
 }
 
 /*
-  Reversed stock: the button prints in paper rather than ink. Both states are
-  written out because the shared button rules live in another stylesheet at
-  the same specificity, and source order between modules isn't ours to assume.
+  Both button states are written out because the shared button rules live in
+  another stylesheet at the same specificity, and source order between
+  modules isn't ours to assume.
 */
 .ctaRow a {
   --btn-bg: var(--text);
@@ -52,15 +66,13 @@
   --btn-fg: var(--on-accent);
 }
 
-.reassure {
+.reassurances {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
-  margin-top: 2rem;
+  gap: 0.6rem 1.5rem;
+  margin-top: 1.75rem;
   font-family: var(--font-label);
-  font-size: var(--fs-label);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: var(--fs-xs);
   color: var(--text-2);
 }
 
@@ -75,7 +87,7 @@
   flex-shrink: 0;
 }
 
-/* Platform list, set as a printed run-on rather than a row of chips. */
+/* Platform list, set as a signal-label run rather than a row of chips. */
 .platforms {
   display: flex;
   flex-wrap: wrap;
@@ -95,7 +107,7 @@
   position: relative;
 }
 
-/* Interpunct between entries, the way a credit line separates names. */
+/* Interpunct between entries. */
 .platform:not(:last-child)::after {
   content: '·';
   position: absolute;
