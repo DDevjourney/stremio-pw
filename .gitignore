@@ -7,3 +7,6 @@ dist-ssr
 
 # TypeScript incremental build caches
 *.tsbuildinfo
+
+# Subagent-driven development scratch: ledgers, briefs, review packages.
+.superpowers/

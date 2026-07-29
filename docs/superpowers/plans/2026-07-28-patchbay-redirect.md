@@ -19,7 +19,7 @@
 - **Every text/surface pair ≥4.5:1** against `--chassis`, `--panel` and `--recess`, including the four signal colours at 12px label sizes. Enforced by `npm run check:contrast` (Task 1).
 - **The rail must stay meaningful at 375px.** If junctions cannot be kept legible on mobile, rework the rail — do **not** hide it with `display: none`. This is a build-breaker, not a judgment call.
 - **Logo geometry never changes.** Only the plate colours it renders against.
-- **No git commits.** The repo root (`C:\Proyectos\JavaScript`) has zero commits and holds seven unrelated projects; the user has asked that this work stay uncommitted. Each task ends at its verification gate.
+- **Commit at the end of every task.** `Stremio/` is now its own git repo (initial commit `1894485`), and work happens in place on `main` by the user's decision — no worktree. Each task ends at its verification gate **and** a commit, so the per-task review can diff it. Never use `--no-verify`.
 - **Dev server:** `preview_start` with `{name: "stremio-landing"}` (port 5173, configured in `.claude/launch.json`). Never launch it via a shell.
 
 ---
@@ -126,6 +126,7 @@ function token(body, name, selector) {
 const SURFACES = ['chassis', 'panel', 'recess']
 const FOREGROUNDS = [
   'silk',
+  'text-2',
   'engrave',
   'sig-catalog',
   'sig-meta',
@@ -327,9 +328,17 @@ Then rename the single usage site. In `src/App.tsx:27`:
 npm run check:contrast
 ```
 
-Expected: PASS, `42/42 pairs clear 4.5:1`.
+Expected: PASS, `48/48 pairs clear 4.5:1`.
 
-If any pair fails, darken (in `:root`) or lighten (in `.lit`) that token until it clears — exactly as the current palette's tertiary grey and vermilion were adjusted. **Do not lower `THRESHOLD`.**
+`--text-2` is in the list because it carries body copy; a contrast gate that
+skips running text is not a gate. It must therefore be a literal hex, not a
+`var()` alias — see the token block below.
+
+If any pair fails, move the **foreground** token away from its surface until it
+clears: in `:root` the surfaces are dark, so a failing foreground gets
+**lighter**; in `.lit` the surfaces are light, so it gets **darker**. **Do not
+lower `THRESHOLD`, and never drop an entry from `FOREGROUNDS` or `SURFACES` to
+make the gate pass.**
 
 - [ ] **Step 5: Verify the build still compiles**
 
@@ -1493,7 +1502,9 @@ Render `t.finalCta.eyebrow` through `.terminus` rather than the global `.eyebrow
 
 - [ ] **Step 3: Style the footer as a connector plate**
 
-The footer sits outside `.lit` (it is a sibling of `<main>` in `src/App.tsx:31`), so it renders on the dark chassis:
+The footer sits outside `.lit` (it is a sibling of `<main>` in `src/App.tsx:31`), so it renders on the dark chassis.
+
+**Note from Task 1:** `Footer.tsx` used to carry a raw `on-ink` class alongside its module class. Under the old paper palette that inverted the footer to dark against a light page; now that the page is dark by default, the inversion is wrong, so Task 1 removed the class outright rather than renaming it to `lit`. The element is plain `<footer className={styles.footer}>` — do not reintroduce an inversion class here.
 
 ```css
 .footer {
@@ -1613,7 +1624,7 @@ npm run build
 npm run build && npm run check:contrast
 ```
 
-Expected: both exit 0, contrast reports `42/42`.
+Expected: both exit 0, contrast reports `48/48`.
 
 - [ ] **Step 2: The rail at four widths, both languages**
 
