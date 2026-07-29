@@ -24,7 +24,6 @@ export const en: Dictionary = {
     ctaPrimary: 'Get Stremio Free',
     ctaSecondary: 'See how it works',
     microcopy: 'Available for Windows, macOS, Linux, Android, iOS, smart TVs and the web.',
-    search: 'Search everything…',
     rowContinue: 'Continue watching',
     rowPopular: 'Popular this week',
     seeAll: 'See all',

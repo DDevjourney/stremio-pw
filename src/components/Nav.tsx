@@ -19,7 +19,7 @@ export function Nav() {
     <header className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
       <div className={`container ${styles.inner}`}>
         <a className={styles.brand} href="#top">
-          <Logo className={styles.mark} size={22} />
+          <Logo className={styles.mark} size={22} decorative />
           Stremio
         </a>
 

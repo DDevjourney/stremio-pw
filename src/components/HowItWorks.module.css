@@ -41,13 +41,19 @@
   );
 }
 
+/*
+  A drilled hole in the panel with a coloured collar, so --recess: this
+  section's ground is --surface (--panel), and --chassis was neither the
+  panel it sits on nor the recess it is meant to read as — a third value
+  with no meaning at this depth.
+*/
 .marker {
   position: absolute;
   left: 0;
   top: 0.45rem;
   width: 12px;
   height: 12px;
-  background: var(--chassis);
+  background: var(--recess);
   border: 2px solid var(--engrave);
   border-radius: 50%;
 }

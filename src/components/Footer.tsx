@@ -16,7 +16,7 @@ export function Footer() {
       <div className="container">
         <div className={styles.top}>
           <a className={styles.brand} href="#top">
-            <Logo className={styles.mark} size={28} />
+            <Logo className={styles.mark} size={28} decorative />
             Stremio
           </a>
 

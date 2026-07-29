@@ -1,8 +1,9 @@
 /*
-  Set as a printed table of results: rules, no container. There is no card
-  around it, no shadow under it and no tinted "winning" column — the emphasis
-  comes from a red rule over the Stremio column and from weight, the way a
-  broadsheet would do it.
+  A crosspoint matrix: rules, no container. There is no card around it, no
+  shadow under it and no tinted "winning" column — the emphasis comes from a
+  signal-green rule capping the Stremio column and from weight. Each cell is
+  a crosspoint that is either lit (--sig-stream) or dead (--dead), the way a
+  patchbay shows what is actually routed.
 */
 
 /* Horizontal scroll container — the page body must never scroll sideways */
@@ -125,13 +126,20 @@
   justify-content: center;
 }
 
-/* Lit crosspoint: a square button, glowing from its own colour. */
+/*
+  Lit crosspoint: a square button with a halo of its own colour. The halo
+  is an outline, not a box-shadow — the file's own header says "no shadow
+  under it" and the system draws structure with rules. At zero blur and
+  zero offset the two render identically, so this is the same pixels
+  obeying the rule instead of breaking it.
+*/
 .lit {
   width: 13px;
   height: 13px;
   background: var(--sig-stream);
   border-radius: 2px;
-  box-shadow: 0 0 0 3px var(--accent-soft);
+  outline: 3px solid var(--accent-soft);
+  outline-offset: 0;
 }
 
 .unlit {
@@ -160,7 +168,13 @@
   color: var(--text-3);
 }
 
-@media (min-width: 760px) {
+/*
+  The hint has to outlive the overflow, not the breakpoint next door. The
+  table's 680px floor still exceeds the rail body's content width until
+  about 766px, so hiding it at 760px left a narrow band where the matrix
+  scrolled with no affordance at all.
+*/
+@media (min-width: 800px) {
   .hint {
     display: none;
   }

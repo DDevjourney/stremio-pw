@@ -38,7 +38,6 @@ export type Dictionary = {
     ctaPrimary: string
     ctaSecondary: string
     microcopy: string
-    search: string
     rowContinue: string
     rowPopular: string
     seeAll: string

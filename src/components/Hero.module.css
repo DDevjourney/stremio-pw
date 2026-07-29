@@ -21,7 +21,7 @@
 
 /* -------- Claim -------- */
 
-/* Standfirst rule: the printed cue that a piece is about to start. */
+/* Input tag: the short lit lead-in that says the channel is live. */
 .badge {
   display: flex;
   align-items: center;
@@ -206,7 +206,6 @@
 
 .posterTitle {
   font-family: var(--font-display);
-  font-stretch: 75%;
   font-weight: 700;
   font-size: max(10px, 10.5cqi);
   line-height: 1;

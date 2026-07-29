@@ -1,6 +1,7 @@
 /*
-  Q&A set as a ruled list against a standing head — the arrangement a
-  printed interview page uses. The head stays put while the answers run.
+  Q&A set as a ruled list against a standing head: the head holds its
+  position on the panel while the answers run past it, the way a fixed
+  legend sits beside a scrolling channel list.
 */
 .layout {
   display: grid;

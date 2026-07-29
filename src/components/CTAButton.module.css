@@ -1,7 +1,7 @@
 /*
-  A printed button: solid ink block, square corners, uppercase label.
-  No glow, no gradient, no sheen — the hover is an ink swap, the way a
-  two-colour press would do it.
+  A panel key: solid block, square corners, silkscreened mono label.
+  No glow, no gradient, no sheen — hover lights the key with the terminal
+  signal, and pressing it bottoms out into the recess.
 */
 .button {
   --btn-bg: var(--text);
@@ -33,8 +33,17 @@
   --btn-fg: var(--on-accent);
 }
 
+/*
+  Bottoming out. Was --accent-2, which resolves to --sig-catalog: pressing
+  any button anywhere flashed the catalog signal, which is a lie about what
+  the hue means. The press is a mechanical event, not a routing one, so it
+  takes chassis values only. --btn-fg is set alongside because :active is
+  reached through :hover, which has already swapped the label to
+  --on-accent — a dark label on a dark recess would vanish.
+*/
 .button:active {
-  --btn-bg: var(--accent-2);
+  --btn-bg: var(--recess);
+  --btn-fg: var(--silk);
 }
 
 /* -------- Variants -------- */
@@ -45,7 +54,7 @@
   letter-spacing: 0.16em;
 }
 
-/* Outline: the same block, unprinted. */
+/* Outline: the same key, unlit — engraved outline, no fill. */
 .secondary {
   --btn-bg: transparent;
   --btn-fg: var(--text);
