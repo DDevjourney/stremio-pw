@@ -1045,10 +1045,23 @@ npm run build && npm run check:contrast
 - Modify: `src/components/HowItWorks.module.css`
 
 **Interfaces:**
-- Consumes: `.rail` from Task 3; `--sig-*` from Task 1; `t.how.steps` (three entries, each with `number`, `title`, `body` — unchanged).
+- Consumes: `.rail` from Task 3; `--sig-*` and `--engrave` from Task 1; `t.how.steps` — **four** entries, each with `number`, `title`, `body`, unchanged.
 - Produces: nothing later tasks depend on.
 
 This is where the rail is elaborated into a full diagram — the same object, not a second idea, at the one section whose content genuinely is a sequence.
+
+**Step count: there are FOUR steps, not three.** `t.how.steps` holds four entries in both dictionaries, and `how.title` reads "From download to playing in four steps". Any layout built for three will wrap the fourth stage onto its own row, off the cable.
+
+**What the colours mean here.** The four stages are the reader's actions, and the cable's colour at each stage is the resource that has come online by that point:
+
+| # | Step | Marker colour | Why |
+|---|---|---|---|
+| 01 | Install Stremio | `--engrave` | the client alone; no add-on has been connected yet |
+| 02 | Add your add-ons | `--sig-catalog` | catalogs are what an add-on contributes first |
+| 03 | Build your library | `--sig-meta` | the library is metadata about what you keep |
+| 04 | Press play | `--sig-stream` | the stream resource is what actually plays |
+
+That is a real signal path, not decoration, and it keeps the hue-to-resource mapping the reader learned in Task 6. `--sig-subtitles` deliberately does not appear here — it earns its place in the Task 8 matrix.
 
 - [ ] **Step 1: Wrap in the rail and render the run**
 
@@ -1119,6 +1132,7 @@ The run is a horizontal cable at ≥760px and a vertical one below. The cable is
   width: var(--rail-line);
   background: linear-gradient(
     to bottom,
+    var(--engrave),
     var(--sig-catalog),
     var(--sig-meta),
     var(--sig-stream)
@@ -1132,16 +1146,25 @@ The run is a horizontal cable at ≥760px and a vertical one below. The cable is
   width: 12px;
   height: 12px;
   background: var(--chassis);
-  border: 2px solid var(--sig-stream);
+  border: 2px solid var(--engrave);
   border-radius: 50%;
 }
 
-.stage:nth-child(1) .marker {
+/*
+  One marker per stage, coloured by the resource that has come online by
+  that point in the sequence. Four stages, four states — see the table in
+  this task's header for why each is what it is.
+*/
+.stage:nth-child(2) .marker {
   border-color: var(--sig-catalog);
 }
 
-.stage:nth-child(2) .marker {
+.stage:nth-child(3) .marker {
   border-color: var(--sig-meta);
+}
+
+.stage:nth-child(4) .marker {
+  border-color: var(--sig-stream);
 }
 
 .stageNo {
@@ -1163,9 +1186,22 @@ The run is a horizontal cable at ≥760px and a vertical one below. The cable is
   color: var(--text-2);
 }
 
+/*
+  Two-up first: four stages across a 760px column would crush each to
+  ~170px. The cable stays vertical here because a horizontal cable through
+  a 2x2 grid would have to jump rows, which is a lie about the signal path.
+*/
 @media (min-width: 760px) {
   .run {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem clamp(1.5rem, 3vw, 3rem);
+  }
+}
+
+/* Four-up: only now is there room for one continuous horizontal run. */
+@media (min-width: 1080px) {
+  .run {
+    grid-template-columns: repeat(4, 1fr);
     gap: 0 clamp(1.5rem, 3vw, 3rem);
   }
 
@@ -1184,6 +1220,7 @@ The run is a horizontal cable at ≥760px and a vertical one below. The cable is
     height: var(--rail-line);
     background: linear-gradient(
       to right,
+      var(--engrave),
       var(--sig-catalog),
       var(--sig-meta),
       var(--sig-stream)
@@ -1196,9 +1233,13 @@ The run is a horizontal cable at ≥760px and a vertical one below. The cable is
 }
 ```
 
+At the 2-up breakpoint the vertical cable from the mobile layout would run down the left edge of the first column only, which is wrong. Either scope `.run::before` to the mobile and 4-up cases and hide it in the 2-up range, or give each `.stage` its own short connector. Pick one, and say which in your report.
+
 - [ ] **Step 3: Verify the diagram reflows**
 
-Screenshot at 375, 760, 1280. The cable must pass through all three markers at every width, and must not extend past the first or last marker into empty space. If the gradient runs edge-to-edge past the outer markers at ≥760px, inset `.run::before` by half a column.
+Measure at 375, 760, 1080 and 1280. The cable must pass through **all four** markers at the widths where it is drawn, and must not extend past the first or last marker into empty space. If the gradient runs edge-to-edge past the outer markers at ≥1080px, inset `.run::before` by half a column.
+
+Assert, with numbers, that all four `.marker` centres sit on the cable's axis: at ≥1080px every marker's vertical centre must equal the cable's vertical centre within 1px; below that, every marker's horizontal centre must equal the cable's horizontal centre within 1px.
 
 - [ ] **Step 4: Gate**
 
