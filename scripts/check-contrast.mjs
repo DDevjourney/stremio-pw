@@ -59,13 +59,22 @@ function ratio(a, b) {
 
 const css = readFileSync(GLOBAL, 'utf8')
 
-/** Pull one `selector { ... }` block out of the stylesheet. */
+/**
+ * Pull one `selector { ... }` block out of the stylesheet.
+ *
+ * Anchored to a rule at the start of a line, not to a bare substring search:
+ * global.css's header comment legitimately names `.lit` in prose, and a
+ * substring match would have latched onto that, walked to the next `{` — the
+ * :root block — and measured :root twice while still printing 48/48 PASS.
+ * A gate that can silently measure the wrong thing is not a gate.
+ */
 function block(selector) {
-  const start = css.indexOf(selector)
-  if (start === -1) throw new Error(`Selector not found in global.css: ${selector}`)
-  const open = css.indexOf('{', start)
+  const anchor = new RegExp(`^${selector.replace('.', '\\.')}\\s*\\{`, 'm')
+  const m = anchor.exec(css)
+  if (!m) throw new Error(`Selector not found in global.css: ${selector}`)
+  const open = css.indexOf('{', m.index)
   const close = css.indexOf('}', open)
-  if (open === -1 || close === -1) throw new Error(`Malformed block: ${selector}`)
+  if (close === -1) throw new Error(`Malformed block: ${selector}`)
   return css.slice(open + 1, close)
 }
 

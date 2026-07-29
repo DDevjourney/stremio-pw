@@ -1,16 +1,33 @@
 /* ============================================================
-   Design tokens — "printed matter"
+   Design tokens — the patchbay
 
-   The page is built as a piece of film-press editorial: warm paper,
-   black ink, one hot red for emphasis, and rules instead of cards.
-   Deliberately single-mode: the palette only works as ink on paper,
-   and a reversible theme would flatten it back to neutral greys.
+   The page is built as a piece of rack equipment: a powder-coated
+   slate-teal chassis, silkscreened labels, recessed panels, and four
+   signal colours patched across it. Deliberately dark-first — the
+   chassis is the ground everything else is mounted to. One block
+   reverses (the closing call to action, see .lit below); it reads as
+   a lit panel where the signal terminates, not as a light theme.
 
    Rules of the system:
      · Structure is drawn with 1px rules, never with shadows.
      · Corners are square. Radius exists only to soften a raw edge.
-     · Colour is ink, paper and red. Nothing is a gradient.
-     · Display type is condensed and large; body type is a serif.
+     · Colour is a taxonomy, never decoration. The four signal hues map
+       one-to-one onto Stremio's add-on resource types — catalog, meta,
+       stream, subtitles — and a hue means the same resource type in
+       every section. Anything that is not signalling a resource type
+       uses chassis, panel, silk or engrave.
+     · Gradients are not a texture. Three exist, each because it encodes
+       something: the routing cable in HowItWorks (which fades through
+       the resources in the order they come online), the poster
+       legibility scrim, and the poster fallback art in data/posters.ts.
+     · Type is squared and technical, not printed. Display is Space
+       Grotesk at full width — no font-stretch, the face has no width
+       axis. Running text is IBM Plex Sans; every label, port ID, value
+       and timecode is IBM Plex Mono, which is a primary voice here
+       rather than an accent.
+     · The rail (bottom of this file) is the signature element: one
+       continuous signal path down the document, drawn with borders on
+       real grid elements. No SVG, no JS, no measurement.
    ============================================================ */
 
 :root {
@@ -85,6 +102,14 @@
   --sig-catalog: #eaa945;
   --sig-meta: #63b3e4;
   --sig-stream: #6cc877;
+  /*
+    The fourth declared add-on resource type. Reserved and contrast-cleared
+    in both scopes, but deliberately unrendered: no section's content is
+    about subtitles, and inventing copy so a colour has somewhere to go
+    would make the taxonomy decorative — the one thing it must not be. It
+    stays defined so the set is complete and so the day a subtitles section
+    exists, its hue is already decided and already passes the gate.
+  */
   --sig-subtitles: #d47fc0;
 
   /* Unpowered: the "no" cells in the crosspoint matrix. */
@@ -94,7 +119,6 @@
   /* Kept so every CSS module keeps compiling while sections convert. */
   --bg: var(--chassis);
   --surface: var(--panel);
-  --surface-hi: var(--recess);
 
   --text: var(--silk);
   --text-2: #b9c4c2;
@@ -104,6 +128,15 @@
   --rule-2: rgba(223, 228, 224, 0.34);
   --rule-3: var(--silk);
 
+  /*
+    Green carries two meanings on purpose, and the double duty is the
+    point rather than an accident: --sig-stream is the `stream` resource,
+    the last thing to come online in the routing sequence and the one the
+    whole page is arguing for. Making it the interactive accent means
+    every button, focus ring and hover lands on "this is the thing that
+    plays". A separate UI accent would have been a fifth colour with no
+    referent, which is exactly the decoration this system bans.
+  */
   --accent: var(--sig-stream);
   --accent-2: var(--sig-catalog);
   --accent-soft: rgba(108, 200, 119, 0.13);
@@ -135,7 +168,6 @@
 
   --bg: var(--chassis);
   --surface: var(--panel);
-  --surface-hi: var(--recess);
 
   --text: var(--silk);
   --text-2: #33403f;
@@ -345,7 +377,14 @@ main {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   line-height: 1;
-  color: var(--sig-stream);
+  /*
+    Engraved, not lit. This was --sig-stream, which put green on all six
+    section eyebrows — including the one directly above the ValueProps
+    grid, where green is being taught to mean `stream` next to an amber
+    catalog module. A signal hue used as a label style is a counterexample
+    to the rule the page is trying to teach. Eyebrows are silkscreen.
+  */
+  color: var(--engrave);
 }
 
 .section-lead {

@@ -21,8 +21,12 @@ export default function App() {
         <Testimonials />
         <FAQ />
         {/*
-          The page closes on ink: this block and the footer both reverse, so
-          the piece ends on a printed page turn instead of trailing off.
+          Where the signal terminates. Only this block inverts — `.lit`
+          redefines the same tokens, so everything nested inside flips
+          without knowing it has been flipped. The footer is deliberately
+          NOT wrapped: it stays on the dark chassis as the back of the rack
+          (see Footer.module.css), so the page ends on the unit, not on a
+          second lit panel.
         */}
         <div className="lit">
           <FinalCTA />
