@@ -1661,10 +1661,15 @@ const INK = hex('#1f2a2e')
 
 ```html
 <path d="M32 2.6 61.4 32 32 61.4 2.6 32 32 2.6Z" fill="#6cc877" />
-<path d="M26 21.4 44.6 32 26 42.6V21.4Z" fill="#1f2a2e" />
+<path d="M26 21.4 44.6 32 26 42.6V21.4Z" fill="#dfe4e0" />
 ```
 
-Note the knockout flips: it was paper-on-vermilion and is now chassis-on-green, so the wedge reads as cut through to the panel behind.
+**The wedge takes `PAPER`, not `INK`.** An earlier draft of this plan said chassis, reasoning that the wedge should "read as cut through to the panel behind". That was wrong for two reasons:
+
+- `generate-icons.mjs:133` fills the wedge with `PAPER` unconditionally, so a chassis-coloured SVG wedge makes the favicon render *differently* depending on whether a browser takes the SVG or the PNG fallback.
+- Matching the generator to the SVG instead would break `og-image.png`, which renders the mark on an `INK` plate — an `INK` wedge would merge into its own background and the play triangle would disappear.
+
+The generator's plate-coloured opaque wedge is deliberate: the README explains it exists because a transparent or background-matching wedge is unreliable against unknown tab and plate backgrounds. Keep that property and make the SVG match it.
 
 - [ ] **Step 3: Regenerate**
 
