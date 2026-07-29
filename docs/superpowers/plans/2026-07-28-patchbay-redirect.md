@@ -1673,7 +1673,17 @@ Expect `false` on a normally-rendered page. Then confirm the rule still exists i
 
 - [ ] **Step 5: Poster pipeline**
 
-`read_network_requests` with `urlPattern: "metahub"` — expect **18** requests, all 200. Not 24: the six backdrop tiles were removed in Task 5.
+Expect exactly **12** poster requests, all 200 — `continueWatching` (6) + `popularNow` (6).
+
+Not 18. The README's "all 18 poster URLs" counted the 12 catalog posters **plus** the 6 `heroBackdrop` tiles, and Task 5 deleted the backdrop. 18 after Task 5 would mean the backdrop is still being fetched.
+
+`read_network_requests` has a blind spot for some cross-origin requests in this environment; prefer:
+
+```js
+performance.getEntriesByType('resource').filter(e => e.name.includes('metahub')).length
+```
+
+The second poster row is lazy-loaded and will not fire on scroll while the browser pane is not compositing frames. Either display the pane, or force `loading="eager"` at runtime via the DOM to confirm all 12 resolve — do not change the source to do this.
 
 - [ ] **Step 6: Keyboard and console**
 
