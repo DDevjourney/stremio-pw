@@ -6,10 +6,16 @@
    not a browser window. Nothing floats, nothing glows.
    ------------------------------------------------------------ */
 
+/*
+  The hero's own rhythm is handed to the rail (see --rail-pad-top in
+  global.css) rather than set as padding on this box: the bus is a grid
+  item, so anything outside the rail's grid is height the run cannot cover.
+  Same amounts as before, one level further in.
+*/
 .hero {
   position: relative;
-  padding-top: clamp(8.5rem, 17vh, 12rem);
-  padding-bottom: clamp(3.5rem, 7vw, 6rem);
+  --rail-pad-top: clamp(8.5rem, 17vh, 12rem);
+  --rail-pad-bottom: clamp(3.5rem, 7vw, 6rem);
   overflow: hidden;
 }
 

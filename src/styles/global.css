@@ -41,6 +41,18 @@
   --gutter: clamp(1.25rem, 4vw, 3rem);
   --section-y: clamp(4.5rem, 9vw, 8rem);
 
+  /*
+    Section rhythm for rail-bearing sections. This lives on .rail-body rather
+    than on the section box, because the bus is a grid item and can only
+    stretch to its grid row — padding on the section would fall outside the
+    grid and break the run into stubs. Declared here (not on .rail) so a
+    section can override it for itself and have it inherit down; the hero
+    does exactly that. Junctions read the same value to stay level with the
+    top of their content instead of floating up into the padding.
+  */
+  --rail-pad-top: var(--section-y);
+  --rail-pad-bottom: var(--section-y);
+
   /* Width of the rail column at >=1000px, and the gutter spine below it. */
   --rail-w: 132px;
   --rail-line: 2px;
@@ -274,6 +286,15 @@ p {
 }
 
 /*
+  A rail-bearing section carries its rhythm on .rail-body instead (see
+  --rail-pad-top). Sections outside the numbered run — the closing call to
+  action — keep the padding on the box and are untouched by this.
+*/
+.section:has(.rail) {
+  padding-block: 0;
+}
+
+/*
   Scroll-reveal. Short and small on purpose: a long fade-up on every block
   is its own kind of template. This is closer to a page settling than an
   animation. Base state applied by useReveal, released on .is-visible.
@@ -409,7 +430,7 @@ main {
 */
 .rail-junction {
   position: absolute;
-  top: 0;
+  top: var(--rail-pad-top);
   left: 0;
   display: flex;
   align-items: center;
@@ -441,6 +462,7 @@ main {
   grid-column: 2;
   min-width: 0;
   padding-left: clamp(1.5rem, 3vw, 2.75rem);
+  padding-block: var(--rail-pad-top) var(--rail-pad-bottom);
 }
 
 /*
