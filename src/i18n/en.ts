@@ -28,6 +28,8 @@ export const en: Dictionary = {
     rowContinue: 'Continue watching',
     rowPopular: 'Popular this week',
     seeAll: 'See all',
+    ident: 'LIVE · ALL SOURCES',
+    timecode: '00:00:00:00',
   },
 
   genres: {

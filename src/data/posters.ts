@@ -35,56 +35,6 @@ export type PosterItem = {
 export const posterUrl = (imdb: string) =>
   `https://images.metahub.space/poster/medium/${imdb}/img`
 
-/**
- * Decorative poster wall stacked down the right margin of the hero.
- *
- * Deliberately different titles from the catalog mockup below, so the two
- * layers don't read as a repeat. Positions are percentages of the backdrop
- * box; `depth` scales the shared parallax offset so tiles drift at different
- * rates. Everything here is presentational — the layer is aria-hidden.
- */
-export type BackdropTile = {
-  imdb: string
-  /** Vertical position within the backdrop. */
-  top: string
-  /**
-   * Gap between the tile and the text column, measured from the rail's inner
-   * edge. Must clear the tile's blur halo, which spills roughly 1.5x the blur
-   * radius past the box — so this tracks `blur`.
-   */
-  inset: string
-  /** Fluid width; tiles extend outward and may bleed off the screen edge. */
-  width: string
-  rotate: string
-  blur: string
-  opacity: number
-  depth: number
-}
-
-/*
- * Tiles live in a single rail covering the margin to the right of the
- * headline block (see `--rail` in Hero.module.css), anchored to the rail's
- * INNER edge — the text boundary — so they hug the claim at every width and
- * grow outward, bleeding off the screen edge rather than inward.
- *
- * `inset` is therefore the only thing standing between a tile and the text,
- * which is why it scales with each tile's blur radius. Tiles print in
- * greyscale multiply, so they read as ink on the stock rather than as
- * artwork sitting on top of it.
- */
-const LARGE = 'clamp(130px, 15vw, 230px)'
-const MEDIUM = 'clamp(105px, 11.5vw, 175px)'
-const SMALL = 'clamp(88px, 9.5vw, 145px)'
-
-export const heroBackdrop: BackdropTile[] = [
-  { imdb: 'tt0468569', top: '1%', inset: '58px', width: LARGE, rotate: '2.5deg', blur: '3px', opacity: 0.5, depth: 0.18 },
-  { imdb: 'tt1392190', top: '17%', inset: '178px', width: SMALL, rotate: '-3deg', blur: '2px', opacity: 0.42, depth: 0.38 },
-  { imdb: 'tt1375666', top: '33%', inset: '56px', width: MEDIUM, rotate: '-2deg', blur: '2.5px', opacity: 0.46, depth: 0.3 },
-  { imdb: 'tt0944947', top: '54%', inset: '156px', width: LARGE, rotate: '1.5deg', blur: '3.5px', opacity: 0.4, depth: 0.12 },
-  { imdb: 'tt14452776', top: '72%', inset: '62px', width: SMALL, rotate: '3deg', blur: '2px', opacity: 0.44, depth: 0.24 },
-  { imdb: 'tt0068646', top: '86%', inset: '190px', width: MEDIUM, rotate: '-2.5deg', blur: '3px', opacity: 0.36, depth: 0.2 },
-]
-
 export const continueWatching: PosterItem[] = [
   {
     imdb: 'tt0903747',

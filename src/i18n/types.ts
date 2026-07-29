@@ -39,6 +39,10 @@ export type Dictionary = {
     rowContinue: string
     rowPopular: string
     seeAll: string
+    /** Channel ident shown on the monitor bezel. */
+    ident: string
+    /** Static timecode on the monitor bezel. Decorative, but localised. */
+    timecode: string
   }
 
   genres: Record<GenreKey, string>
