@@ -1323,14 +1323,30 @@ Then in `Cell`, replace the boolean branch:
 
 Replace `<div className="container">` with the same `.rail` / `.rail-bus` / `.rail-junction` / `.rail-body` structure used in Tasks 5–7, leaving the scroller, table and captions inside `.rail-body` untouched.
 
-- [ ] **Step 4: Verify accessibility survived**
+- [ ] **Step 4: Close the page-level horizontal overflow**
+
+**This section owns the page's only remaining horizontal-overflow defect, and it is a hard gate.** Measured at a 375px viewport during Task 4: `document.documentElement.scrollWidth` is 572 against a `clientWidth` of 375. Isolation proved the source — hiding the header leaves 572 unchanged; hiding this section's `.scroller` drops it to exactly 375.
+
+The subtle part: the `.scroller` element itself measures only 335px wide at `left: 20`, so the container is correctly constrained. Something **inside** it is escaping the `overflow-x: auto` clip. Find the escaping descendant rather than masking the symptom.
+
+Do **not** fix this with `overflow: hidden` on `body` or on an ancestor. `body` already carries `overflow-x: hidden` from the original stylesheet, which is precisely why this bug stayed invisible; leaning on it hides content instead of fixing layout.
+
+Acceptance, in **both** languages at **320** and **375** px:
+
+```js
+document.documentElement.scrollWidth <= document.documentElement.clientWidth
+```
+
+must be `true`, while the matrix itself still scrolls horizontally inside its own container.
+
+- [ ] **Step 5: Verify accessibility survived**
 
 - `read_page` — confirm the table still exposes its caption, column headers and row headers, and that each boolean cell reports "Yes" or "No" as text.
 - `computer` `key: "Tab"` to the scroller — confirm the focus ring appears and arrow keys scroll it.
 - Screenshot at 375 (matrix scrolls inside its container) and 1280.
 - `javascript_tool`: `document.documentElement.scrollWidth <= document.documentElement.clientWidth` — expect `true` at 375. The matrix must not push the page sideways.
 
-- [ ] **Step 5: Gate**
+- [ ] **Step 6: Gate**
 
 ```bash
 npm run build && npm run check:contrast
