@@ -7,27 +7,44 @@ export function HowItWorks() {
 
   return (
     <section className={`section ${styles.section}`} id="how-it-works">
-      <div className="container">
-        <Reveal className="section-head">
-          <span className="eyebrow">{t.how.eyebrow}</span>
-          <h2>{t.how.title}</h2>
-          <p className="section-lead">{t.how.lead}</p>
-        </Reveal>
-
-        <div className={styles.steps}>
-          {t.how.steps.map((step, i) => (
-            <Reveal key={step.number} delay={i * 120} className={styles.step}>
-              <span className={styles.marker}>{step.number}</span>
-              <h3 className={styles.stepTitle}>{step.title}</h3>
-              <p className={styles.stepBody}>{step.body}</p>
-            </Reveal>
-          ))}
+      <div className="rail">
+        <div className="rail-bus">
+          <span className="rail-junction" aria-hidden="true" />
         </div>
 
-        {/* Set as a footnote to the sequence, marked by a rule rather than an icon. */}
-        <Reveal className={styles.footnote}>
-          <strong>{t.how.noteTitle}</strong> {t.how.noteBody}
-        </Reveal>
+        <div className="rail-body">
+          <Reveal className="section-head">
+            <span className="eyebrow">{t.how.eyebrow}</span>
+            <h2>{t.how.title}</h2>
+            <p className="section-lead">{t.how.lead}</p>
+          </Reveal>
+
+          {/*
+            Four stages, four markers. The marker colour at each stage is the
+            resource that has come online by that point: engrave (client only)
+            -> catalog -> meta -> stream. Same hue-to-resource mapping as the
+            rest of the page; --sig-subtitles is deliberately absent here.
+          */}
+          <ol className={styles.run}>
+            {t.how.steps.map((step, i) => (
+              <Reveal key={step.title} delay={i * 110}>
+                <li className={styles.stage}>
+                  <span className={styles.marker} aria-hidden="true" />
+                  <span className={styles.stageNo}>{step.number}</span>
+                  <h3 className={styles.stageTitle}>{step.title}</h3>
+                  <p className={styles.stageBody}>{step.body}</p>
+                </li>
+              </Reveal>
+            ))}
+          </ol>
+
+          <Reveal>
+            <aside className={styles.note}>
+              <h3 className={styles.noteTitle}>{t.how.noteTitle}</h3>
+              <p className={styles.noteBody}>{t.how.noteBody}</p>
+            </aside>
+          </Reveal>
+        </div>
       </div>
     </section>
   )

@@ -1,7 +1,8 @@
 /*
-  Stepped instructions, set as a printed sequence: heavy rule over each step,
-  the number hanging above the title. The band steps back onto darker stock
-  so the page reads as gathered sheets rather than one endless scroll.
+  The rail elaborated into a full routing diagram: the one section whose
+  content is genuinely a sequence. A cable (a border on the list) runs
+  through four markers, one per stage, coloured by the resource that has
+  come online by that point in the sequence.
 */
 .section {
   position: relative;
@@ -9,64 +10,172 @@
   border-block: 1px solid var(--rule-3);
 }
 
-.steps {
+.run {
+  position: relative;
   display: grid;
-  gap: clamp(1.75rem, 3vw, 2.5rem);
-  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
+.stage {
+  position: relative;
+  padding-left: 2rem;
+}
+
+/* Vertical cable, mobile-first: a border down the list. */
+.run::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 0.6rem;
+  bottom: 0.6rem;
+  width: var(--rail-line);
+  background: linear-gradient(
+    to bottom,
+    var(--engrave),
+    var(--sig-catalog),
+    var(--sig-meta),
+    var(--sig-stream)
+  );
+}
+
+.marker {
+  position: absolute;
+  left: 0;
+  top: 0.45rem;
+  width: 12px;
+  height: 12px;
+  background: var(--chassis);
+  border: 2px solid var(--engrave);
+  border-radius: 50%;
+}
+
+/*
+  One marker per stage, coloured by the resource that has come online by
+  that point in the sequence. Four stages, four states:
+  01 install (client only) -> 02 add-ons (catalog) -> 03 library (meta) ->
+  04 play (stream). Same hue-to-resource mapping the reader learned at the
+  value-props rail; --sig-subtitles is deliberately absent here.
+
+  Selectors target `.run`'s direct children rather than `.stage` itself:
+  Reveal wraps each <li> in its own <div class="reveal">, so those wrapper
+  divs — not the <li> elements — are the actual siblings the ordinal count
+  applies to.
+*/
+.run > *:nth-child(2) .marker {
+  border-color: var(--sig-catalog);
+}
+
+.run > *:nth-child(3) .marker {
+  border-color: var(--sig-meta);
+}
+
+.run > *:nth-child(4) .marker {
+  border-color: var(--sig-stream);
+}
+
+.stageNo {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: var(--font-label);
+  font-size: var(--fs-label);
+  letter-spacing: 0.12em;
+  color: var(--engrave);
+}
+
+.stageTitle {
+  margin-bottom: 0.6rem;
+  font-size: var(--fs-h3);
+}
+
+.stageBody {
+  font-size: var(--fs-sm);
+  color: var(--text-2);
+}
+
+/*
+  Two-up: four stages across a 760px column would crush each to ~170px. A
+  horizontal cable through a 2x2 grid would have to jump rows, which is a
+  lie about the signal path — and a vertical cable down the left edge would
+  only run past the first column, which is worse. So the cable is dropped
+  in this range entirely; each stage's own marker still carries its colour,
+  and the ordered list still carries the sequence. The cable returns once
+  there is room to draw it honestly (mobile single column, four-up row).
+*/
 @media (min-width: 760px) {
-  .steps {
-    grid-template-columns: repeat(4, 1fr);
+  .run {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem clamp(1.5rem, 3vw, 3rem);
+  }
+
+  .run::before {
+    display: none;
   }
 }
 
-.step {
-  padding-top: 1rem;
-  border-top: 2px solid var(--rule-3);
+/* Four-up: only now is there room for one continuous horizontal run. */
+@media (min-width: 1080px) {
+  .run {
+    --how-gap: clamp(1.5rem, 3vw, 3rem);
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0 var(--how-gap);
+  }
+
+  .stage {
+    padding-left: 0;
+    padding-top: 2.25rem;
+  }
+
+  /*
+    Cable rotates to horizontal, running through every marker. Markers sit
+    at the left edge of each stage (see .marker), not centred in the
+    column, so the cable's ends must land on marker 0's and marker 3's
+    centres rather than the grid's outer edges — left:0/right:0 would run
+    a whole column's width past the last marker into empty space.
+  */
+  .run::before {
+    display: block;
+    left: 6px;
+    right: calc((100% - 3 * var(--how-gap)) / 4 - 6px);
+    top: 5px;
+    bottom: auto;
+    width: auto;
+    height: var(--rail-line);
+    background: linear-gradient(
+      to right,
+      var(--engrave),
+      var(--sig-catalog),
+      var(--sig-meta),
+      var(--sig-stream)
+    );
+  }
+
+  .marker {
+    top: 0;
+  }
 }
 
-/* The step number is the loudest thing in the column, as on a printed form. */
-.marker {
-  display: block;
-  font-family: var(--font-display);
-  font-stretch: 75%;
-  font-size: clamp(2.25rem, 4vw, 3.25rem);
-  font-weight: 800;
-  line-height: 1;
-  letter-spacing: -0.01em;
-  color: var(--accent);
-}
-
-.stepTitle {
-  margin-top: 0.9rem;
-  font-size: 1.25rem;
-}
-
-.stepBody {
-  margin-top: 0.65rem;
-  padding-right: 0.5rem;
-  font-size: var(--fs-sm);
-  line-height: 1.65;
-  color: var(--text-2);
-}
-
-.footnote {
+.note {
   margin-top: clamp(3rem, 5vw, 4.5rem);
   padding-left: 1.25rem;
-  border-left: 3px solid var(--accent);
+  border-left: 3px solid var(--sig-stream);
   max-width: 72ch;
-  font-size: var(--fs-sm);
-  line-height: 1.65;
-  color: var(--text-2);
 }
 
-.footnote strong {
+.noteTitle {
   font-family: var(--font-label);
   font-size: var(--fs-label);
   font-weight: 600;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--text);
-  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.noteBody {
+  font-size: var(--fs-sm);
+  line-height: 1.65;
+  color: var(--text-2);
 }
