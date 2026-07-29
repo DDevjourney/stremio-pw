@@ -12,7 +12,7 @@ export function Footer() {
   ]
 
   return (
-    <footer className={`on-ink ${styles.footer}`}>
+    <footer className={styles.footer}>
       <div className="container">
         <div className={styles.top}>
           <a className={styles.brand} href="#top">
