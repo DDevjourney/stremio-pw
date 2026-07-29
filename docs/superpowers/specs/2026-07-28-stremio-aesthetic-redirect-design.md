@@ -235,6 +235,13 @@ The same bar the current README sets, **re-run rather than inherited**:
    the four signal colours at 12px label sizes.
 3. No horizontal page scroll at any width; the comparison matrix scrolls inside its
    own container only.
+
+   Measure this as `window.scrollX` staying `0` after an attempted horizontal
+   scroll, plus `document.body.offsetWidth === documentElement.clientWidth`.
+   **Not** via `documentElement.scrollWidth`: that reports the unclipped extent of
+   the 680px comparison table inside its `overflow-x: auto` scroller, reading ~572
+   at a 375px viewport while the page itself does not scroll at all. Confirmed by
+   lifting `body { overflow-x: hidden }` and re-testing — nothing hides behind it.
 4. The rail checked at 375 / 1000 / 1280 / 1920 in both languages — junctions aligned
    to their sections, no collision between the claim and the rail, spine meaningful
    at 375.

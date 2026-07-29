@@ -590,7 +590,7 @@ The junction is `aria-hidden` — it is a positional marker, and the section alr
 With the dev server running, use `resize_window` at **375**, **1000**, **1280**, **1920**. At each width:
 - `computer` screenshot — the bus is continuous, the junction stub meets the content column, nothing overlaps.
 - At 375 specifically: the spine is visible in the gutter and the `CH 02` marker is legible. **If it is not legible, rework the rail — do not hide it.**
-- `javascript_tool`: `document.documentElement.scrollWidth <= document.documentElement.clientWidth` — expect `true` at every width.
+- `javascript_tool`: the page must not scroll horizontally — `window.scrollTo(500, window.scrollY)` must leave `window.scrollX === 0`, and `document.body.offsetWidth` must equal `documentElement.clientWidth`, at every width. **Do not assert on `documentElement.scrollWidth`**; it reports unclipped descendant extent and is not a page-scroll signal on this page.
 
 Then click the language toggle and repeat at 375 and 1280. Spanish copy runs longer; the rail must not collide with it.
 
@@ -1364,28 +1364,45 @@ Then in `Cell`, replace the boolean branch:
 
 Replace `<div className="container">` with the same `.rail` / `.rail-bus` / `.rail-junction` / `.rail-body` structure used in Tasks 5–7, leaving the scroller, table and captions inside `.rail-body` untouched.
 
-- [ ] **Step 4: Close the page-level horizontal overflow**
+- [ ] **Step 4: Confirm the matrix scrolls internally and the page does not**
 
-**This section owns the page's only remaining horizontal-overflow defect, and it is a hard gate.** Measured at a 375px viewport during Task 4: `document.documentElement.scrollWidth` is 572 against a `clientWidth` of 375. Isolation proved the source — hiding the header leaves 572 unchanged; hiding this section's `.scroller` drops it to exactly 375.
+**There is no horizontal-overflow bug to fix here. Earlier drafts of this plan said there was; that was wrong, and the correction matters because "fixing" it would break this section.**
 
-The subtle part: the `.scroller` element itself measures only 335px wide at `left: 20`, so the container is correctly constrained. Something **inside** it is escaping the `overflow-x: auto` clip. Find the escaping descendant rather than masking the symptom.
+What happened: at a 375px viewport `document.documentElement.scrollWidth` reads 572 against a `clientWidth` of 375, and hiding this section's `.scroller` drops it to 375. That looks conclusive and isn't. `documentElement.scrollWidth` reports the unclipped layout extent of descendants, including the 680px table living inside an `overflow-x: auto` container that legitimately scrolls it. It is not a measure of whether the *page* scrolls.
 
-Do **not** fix this with `overflow: hidden` on `body` or on an ancestor. `body` already carries `overflow-x: hidden` from the original stylesheet, which is precisely why this bug stayed invisible; leaning on it hides content instead of fixing layout.
+The decisive test, run at 375px both with and without `body { overflow-x: hidden }` lifted:
+
+- `window.scrollTo(500, y)` leaves `window.scrollX === 0` — the page cannot scroll horizontally
+- `document.body.offsetWidth === 375` — the body is exactly viewport width
+
+Both hold with the mask removed, so nothing is hiding behind it. **`scrollWidth` was a measurement artifact.**
+
+Do **not** constrain the table, shrink its columns, or add `overflow: hidden` anywhere to make `scrollWidth` fall. The 680px table inside a 335px scroller is the intended design: the matrix scrolls inside its own container.
 
 Acceptance, in **both** languages at **320** and **375** px:
 
 ```js
-document.documentElement.scrollWidth <= document.documentElement.clientWidth
+// the page must not scroll horizontally
+window.scrollTo(500, window.scrollY);
+const pageDoesNotScroll = window.scrollX === 0;
+window.scrollTo(0, window.scrollY);
+
+// the body must not exceed the viewport
+const bodyFits = document.body.offsetWidth === document.documentElement.clientWidth;
+
+// and the matrix MUST still scroll inside its own container
+const s = document.querySelector('[role="region"]');
+const matrixScrolls = s.scrollWidth > s.clientWidth;
 ```
 
-must be `true`, while the matrix itself still scrolls horizontally inside its own container.
+All three must be `true`. **Do not assert on `documentElement.scrollWidth`** — on this page it is not a meaningful signal.
 
 - [ ] **Step 5: Verify accessibility survived**
 
 - `read_page` — confirm the table still exposes its caption, column headers and row headers, and that each boolean cell reports "Yes" or "No" as text.
 - `computer` `key: "Tab"` to the scroller — confirm the focus ring appears and arrow keys scroll it.
 - Screenshot at 375 (matrix scrolls inside its container) and 1280.
-- `javascript_tool`: `document.documentElement.scrollWidth <= document.documentElement.clientWidth` — expect `true` at 375. The matrix must not push the page sideways.
+- `javascript_tool`: use the three-assertion block from Step 4 — page cannot scroll horizontally, body fits the viewport, matrix still scrolls internally. Do **not** assert on `documentElement.scrollWidth`; see Step 4 for why it is misleading here.
 
 - [ ] **Step 6: Gate**
 
@@ -1687,7 +1704,7 @@ Expected: both exit 0, contrast reports `48/48`.
 
 `resize_window` at 375, 1000, 1280, 1920. At each, in **both** languages:
 - screenshot;
-- `javascript_tool`: `document.documentElement.scrollWidth <= document.documentElement.clientWidth` → `true`;
+- horizontal scroll, measured correctly — `window.scrollTo(500, y)` must leave `window.scrollX === 0`, and `document.body.offsetWidth` must equal `documentElement.clientWidth`. **Do not use `documentElement.scrollWidth`**: it reports the unclipped extent of the 680px comparison table inside its own `overflow-x: auto` scroller and reads ~572 at a 375px viewport even though the page does not scroll. Verified with `body { overflow-x: hidden }` lifted — no real overflow is hiding behind it;
 - junctions aligned to their sections, no collision with the claim, spine legible at 375.
 
 Eight screenshots total. Spanish runs longer than English throughout — that is where collisions show up.
